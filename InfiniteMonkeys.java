@@ -9,12 +9,12 @@ import java.util.*;
 
 public class InfiniteMonkeys extends JFrame
 {
-   private static final String APPLICATION_VERSION          = "v0.002";// + "." + //", build: " +
+   private static final String APPLICATION_VERSION          = "v0.003";// + "." + //", build: " +
                                                               //BuildNumberIncrementer.getBuildNumberFromInsideJAR ();
    private static final String APPLICATION_TITLE            = "Infinite Monkeys – " + APPLICATION_VERSION;
 
    private static final String CHARACTERS        = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-   private static final int    SENTENCE_LENGTH   = 20;
+   private static final int    SENTENCE_LENGTH   = 15;
    private static final String WORDS_FILE        = "wordlist.dat";
 
    JTextArea   outputTextArea                    = new JTextArea ();
@@ -175,12 +175,10 @@ public class InfiniteMonkeys extends JFrame
          //if (sentenceCount > 1000)
          //   validSentence = true; // Exit Loop - just for testing.
 
-         /*
          if (sentenceCount % 10_000 == 0)
          {
             System.out.print (".");
          }
-         */
 
 
          // For testing:
@@ -193,6 +191,10 @@ public class InfiniteMonkeys extends JFrame
       System.out.println ("Generating a valid sentence took: " +
                           sentenceCount + " tries !");
       System.out.println (sentenceStr );
+
+      Toolkit.getDefaultToolkit().beep();
+      Toolkit.getDefaultToolkit().beep();
+      Toolkit.getDefaultToolkit().beep();
    }
 
    private void resetTextArea ()
