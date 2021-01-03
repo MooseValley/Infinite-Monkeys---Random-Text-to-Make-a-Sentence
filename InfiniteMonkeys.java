@@ -9,9 +9,13 @@ import java.util.*;
 
 public class InfiniteMonkeys extends JFrame
 {
+   private static final String APPLICATION_VERSION          = "v0.002";// + "." + //", build: " +
+                                                              //BuildNumberIncrementer.getBuildNumberFromInsideJAR ();
+   private static final String APPLICATION_TITLE            = "Infinite Monkeys – " + APPLICATION_VERSION;
 
    private static final String CHARACTERS        = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
    private static final int    SENTENCE_LENGTH   = 20;
+   private static final String WORDS_FILE        = "wordlist.dat";
 
    JTextArea   outputTextArea                    = new JTextArea ();
    JScrollPane outputTextAreaScrollPane          = new JScrollPane (outputTextArea);
@@ -23,6 +27,8 @@ public class InfiniteMonkeys extends JFrame
 
    public InfiniteMonkeys ()
    {
+      setTitle (APPLICATION_TITLE);
+
       setLayout (new BorderLayout () );
 
       JPanel buttonPanel = new JPanel (new FlowLayout (FlowLayout.CENTER) );
@@ -35,7 +41,7 @@ public class InfiniteMonkeys extends JFrame
       add (outputTextAreaScrollPane, BorderLayout.CENTER);
       add (buttonPanel,              BorderLayout.SOUTH);
 
-      try (BufferedReader inputFileReader = Files.newBufferedReader(Paths.get("wordlist.dat") ) )
+      try (BufferedReader inputFileReader = Files.newBufferedReader(Paths.get(WORDS_FILE) ) )
       {
          String lineStr = "";
          while ((lineStr = inputFileReader.readLine() ) != null)
@@ -49,7 +55,25 @@ public class InfiniteMonkeys extends JFrame
       }
 
 
+      System.out.println ("");
+      System.out.println (APPLICATION_TITLE);
+      System.out.println ("");
+      System.out.println ("Java version: " + System.getProperty ("java.version") );
+      System.out.println ("32/64 bit:    x" + System.getProperty ("sun.arch.data.model") );
+      System.out.println ("java.vendor:  " + System.getProperty("java.vendor"));
+      System.out.println ("java.home:    " + System.getProperty("java.home"));
+      System.out.println ("OS.name:      " + System.getProperty("os.name"));
+      System.out.println ("OS.arch:      " + System.getProperty("os.arch"));
+      System.out.println ("OS.version:   " + System.getProperty("os.version"));
 
+      System.out.println ("");
+      System.out.println ("Words loaded: " + String.format ("%,d", wordsArrayList.size() ) +
+                          " from '" + WORDS_FILE + "'." );
+      System.out.println ("");
+
+      System.out.println ("Generating random phrases " +
+                          SENTENCE_LENGTH + " chars long ...");
+      System.out.println ("");
    }
 
    private void generateRandomText ()
@@ -85,6 +109,9 @@ public class InfiniteMonkeys extends JFrame
       int sentenceCount = 0;
       StringBuilder sentenceSb     = new StringBuilder ();
       String sentenceStr = "";
+
+      System.out.println ("Generating random phrases " +
+                          SENTENCE_LENGTH + " chars long ...");
 
       Date currentDateTime = new Date();
       System.out.println ("START: " + currentDateTime);
@@ -148,8 +175,12 @@ public class InfiniteMonkeys extends JFrame
          //if (sentenceCount > 1000)
          //   validSentence = true; // Exit Loop - just for testing.
 
-         if (sentenceCount % 1000 == 0)
+         /*
+         if (sentenceCount % 10_000 == 0)
+         {
             System.out.print (".");
+         }
+         */
 
 
          // For testing:
