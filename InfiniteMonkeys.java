@@ -9,12 +9,13 @@ import java.util.*;
 
 public class InfiniteMonkeys extends JFrame
 {
-   private static final String APPLICATION_VERSION          = "v0.004";// + "." + //", build: " +
+   private static final String APPLICATION_VERSION          = "v0.005";// + "." + //", build: " +
                                                               //BuildNumberIncrementer.getBuildNumberFromInsideJAR ();
    private static final String APPLICATION_TITLE            = "Infinite Monkeys - " + APPLICATION_VERSION;
 
    private static final String CHARACTERS         = "     ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-   private static final int    SENTENCE_LENGTH    = 15;
+   private static final int    SENTENCE_LENGTH    = 10;
+   private static final int    SENTENCES_TO_FIND  =  5;
    private static final String WORDS_FILE         = "wordlist.dat";
    private static final int    ITERATIONS_PER_DOT = 10_000;
 
@@ -36,7 +37,7 @@ public class InfiniteMonkeys extends JFrame
       buttonPanel.add (generateRandomTextButton);
       buttonPanel.add (resetTextAreaButton);
 
-      generateRandomTextButton.addActionListener (event -> generateRandomText () );
+      generateRandomTextButton.addActionListener (event -> generateRandomSentences () );
       resetTextAreaButton.addActionListener      (event -> resetTextArea () );
 
       add (outputTextAreaScrollPane, BorderLayout.CENTER);
@@ -77,7 +78,29 @@ public class InfiniteMonkeys extends JFrame
       System.out.println ("");
    }
 
-   private void generateRandomText ()
+   private void generateRandomSentences ()
+   {
+      Date currentDateTime = new Date();
+      System.out.println ("START: " + currentDateTime);
+      System.out.println ("Every '.' is : " + String.format ("%,d", ITERATIONS_PER_DOT) + " iterations.");
+      System.out.println ("Generating random phrases " + SENTENCE_LENGTH + " chars long ...");
+
+
+      for (int k = 0; k < SENTENCES_TO_FIND; k++)
+      {
+         generateARandomSentence ();
+      }
+
+      currentDateTime = new Date();
+      System.out.println ("");
+      System.out.println ("END: " + currentDateTime);
+
+      Toolkit.getDefaultToolkit().beep();
+      Toolkit.getDefaultToolkit().beep();
+      Toolkit.getDefaultToolkit().beep();
+   }
+
+   private void generateARandomSentence ()
    {
       /*
       Generate a random string of text.  How long ?
@@ -107,33 +130,53 @@ public class InfiniteMonkeys extends JFrame
       boolean validSentence = false;
 
       SecureRandom  generator      = new SecureRandom();
-      int sentenceCount = 0;
+      int iterationCount = 0;
       StringBuilder sentenceSb     = new StringBuilder ();
       String sentenceStr = "";
 
-      System.out.println ("Generating random phrases " +
-                          SENTENCE_LENGTH + " chars long ...");
+      int charactersArrayLength = CHARACTERS.length();
 
-      Date currentDateTime = new Date();
-      System.out.println ("START: " + currentDateTime);
-      System.out.println ("Every '.' is : " + String.format ("%,d", ITERATIONS_PER_DOT) + " iterations.");
 
       while (validSentence == false)
       {
 
          sentenceSb     = new StringBuilder ();
+         sentenceStr    = "";
 
-         for (int k = 0; k < SENTENCE_LENGTH; k++)
+         //char priorLetter = 'x';
+         //int lengthSoFar  = 0;
+         //for (int k = 0; k < SENTENCE_LENGTH; k++)
+         while (sentenceStr.length() < SENTENCE_LENGTH)
          {
             // Append a random character onto our string
             // i.e. get a letter from CHARACTERS with index between
             // 0 and CHARACTERS.length - 1
-            int  index  = generator.nextInt (CHARACTERS.length() );
+            int  index  = generator.nextInt (charactersArrayLength );
             char letter = CHARACTERS.charAt (index);
             sentenceSb.append (letter);
+
+            /*
+            if (letter == ' ')
+            {
+               if (priorLetter != ' ')
+                  sentenceSb.append (letter);
+            }
+            else
+            */
+
+            // For Testing:
+            //sentenceSb = new StringBuilder ("   Cat    hat    jumped   fish     ");
+
+            sentenceStr = sentenceSb.toString().trim().toLowerCase();
+
+            while (sentenceStr.contains ("  ") == true)
+            {
+               sentenceStr = sentenceStr.replace ("  ", " ");
+            }
+
          }
 
-         sentenceCount++;
+         iterationCount++;
 
          //outputTextArea.append (sentenceSb.toString() + "\n");
 
@@ -144,13 +187,14 @@ public class InfiniteMonkeys extends JFrame
          // For Testing:
          //sentenceSb = new StringBuilder ("   Cat    hat    jumped   fish     ");
 
+         /*
          sentenceStr = sentenceSb.toString().trim().toLowerCase();
 
          while (sentenceStr.contains ("  ") == true)
          {
             sentenceStr = sentenceStr.replace ("  ", " ");
          }
-
+         */
 
          String[] sentenceWordsArray = sentenceStr.split (" ");
 
@@ -174,10 +218,10 @@ public class InfiniteMonkeys extends JFrame
             }
          }
 
-         //if (sentenceCount > 1000)
+         //if (iterationCount > 1000)
          //   validSentence = true; // Exit Loop - just for testing.
 
-         if (sentenceCount % 10_000 == 0)
+         if (iterationCount % ITERATIONS_PER_DOT == 0)
          {
             System.out.print (".");
          }
@@ -187,18 +231,13 @@ public class InfiniteMonkeys extends JFrame
          //validSentence = true; // Exit Loop
       }
 
-      currentDateTime = new Date();
-      System.out.println ("");
-      System.out.println ("END: " + currentDateTime);
-      System.out.println ("Generating a valid sentence took: " +
-                          String.format ("%,d", sentenceCount) + " tries !");
-      System.out.println ("--> '" + sentenceStr + "'");
+      if (iterationCount > ITERATIONS_PER_DOT)
+      {
+         System.out.println ();
+      }
 
-      outputTextArea.append ("'" + sentenceStr + "'" + " -- " + String.format ("%,d", sentenceCount) + " tries !" + "\n");
-
-      Toolkit.getDefaultToolkit().beep();
-      Toolkit.getDefaultToolkit().beep();
-      Toolkit.getDefaultToolkit().beep();
+      System.out.print      ("'" + sentenceStr + "'" + " -- " + String.format ("%,d", iterationCount) + " tries !" + "\n");
+      outputTextArea.append ("'" + sentenceStr + "'" + " -- " + String.format ("%,d", iterationCount) + " tries !" + "\n");
    }
 
    private void resetTextArea ()
