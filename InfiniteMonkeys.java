@@ -9,13 +9,14 @@ import java.util.*;
 
 public class InfiniteMonkeys extends JFrame
 {
-   private static final String APPLICATION_VERSION          = "v0.003";// + "." + //", build: " +
+   private static final String APPLICATION_VERSION          = "v0.004";// + "." + //", build: " +
                                                               //BuildNumberIncrementer.getBuildNumberFromInsideJAR ();
    private static final String APPLICATION_TITLE            = "Infinite Monkeys – " + APPLICATION_VERSION;
 
-   private static final String CHARACTERS        = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-   private static final int    SENTENCE_LENGTH   = 15;
-   private static final String WORDS_FILE        = "wordlist.dat";
+   private static final String CHARACTERS         = "     ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   private static final int    SENTENCE_LENGTH    = 10;
+   private static final String WORDS_FILE         = "wordlist.dat";
+   private static final int    ITERATIONS_PER_DOT = 10_000;
 
    JTextArea   outputTextArea                    = new JTextArea ();
    JScrollPane outputTextAreaScrollPane          = new JScrollPane (outputTextArea);
@@ -115,6 +116,7 @@ public class InfiniteMonkeys extends JFrame
 
       Date currentDateTime = new Date();
       System.out.println ("START: " + currentDateTime);
+      System.out.println ("Every '.' is : " + String.format ("%,d", ITERATIONS_PER_DOT) + " iterations.");
 
       while (validSentence == false)
       {
@@ -189,8 +191,10 @@ public class InfiniteMonkeys extends JFrame
       System.out.println ("");
       System.out.println ("END: " + currentDateTime);
       System.out.println ("Generating a valid sentence took: " +
-                          sentenceCount + " tries !");
-      System.out.println (sentenceStr );
+                          String.format ("%,d", sentenceCount) + " tries !");
+      System.out.println ("--> '" + sentenceStr + "'");
+
+      outputTextArea.append ("'" + sentenceStr + "'" + " -- " + String.format ("%,d", sentenceCount) + " tries !" + "\n");
 
       Toolkit.getDefaultToolkit().beep();
       Toolkit.getDefaultToolkit().beep();
